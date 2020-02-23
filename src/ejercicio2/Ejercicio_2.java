@@ -58,14 +58,12 @@ public class Ejercicio_2 {
 						System.out.println("\t"+files[i].getName()+" => "+tipos[files[i].getType()]);
 					}
 					
-					//volvemos a cambiar de directorio
-					//y volvemos a listar
 					cliente.changeWorkingDirectory(directorio);
 					System.out.println("Directorio actual: "+cliente.printWorkingDirectory());
 					files=cliente.listFiles();
 					System.out.println("Ficheros en el directorio actual: "+files.length);
 					
-					//Ahora, aprovechamos para escribir en el LOG.txt personal de cada usuario, a que hora entro
+					
 					String text="\nHora de conexion: "+LocalDateTime.now();
 					try (ByteArrayInputStream local = new ByteArrayInputStream(text.getBytes("UTF-8"))) {
 					    cliente.appendFile("LOG.txt", local);
@@ -73,11 +71,6 @@ public class Ejercicio_2 {
 					    throw new RuntimeException("Uh-oh", ex);
 					}
 				
-				/*for (int i = 0; i < files.length; i++) {
-					System.out.println("\t"+files[i].getName()+" => "+tipos[files[i].getType()]);
-				}*/
-				
-				//nos deslogamos
 					boolean logout=cliente.logout();
 					
 					if(logout)
@@ -86,7 +79,6 @@ public class Ejercicio_2 {
 						System.out.println("Error al hacer logout");
 					cliente.disconnect();
 					System.out.println("Desconectado");
-					//Sumamos uno al numero de logins correctos
 					usuariosCorrectos++;
 				}else {
 					System.out.println("Login incorrecto");
@@ -97,11 +89,7 @@ public class Ejercicio_2 {
 				e.printStackTrace();
 			}
 		}while(!usuario.equalsIgnoreCase("*"));
-		
-		
-		//Comenzamos el proceso de enviarnos un correo para ver el numero
-		//de logins correctos que se han sucedido en la sesion.
-		
+
 		AuthenticatingSMTPClient client=new AuthenticatingSMTPClient();
 		
 		String server="smtp.gmail.com";
@@ -115,8 +103,7 @@ public class Ejercicio_2 {
 			KeyManagerFactory kmf=KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(null,null);
 			KeyManager km=kmf.getKeyManagers()[0];
-			
-			//Nos conectamos al servidor de correo y al puerto correspondiente.
+
 			client.connect(server,puerto);
 			System.out.println("1 - "+client.getReplyString());
 			client.setKeyManager(km);
@@ -130,13 +117,11 @@ public class Ejercicio_2 {
 				
 				client.ehlo(server);
 				System.out.println("2 - "+client.getReplyString());
-				
-				//Comienza la negociacion SSL TLS
+
 				if(client.execTLS()) {
 					System.out.println("3 - "+client.getReplyString());
 					
 					if(client.auth(AuthenticatingSMTPClient.AUTH_METHOD.PLAIN, username, password)) {
-						//Nos lo enviamos a nosotros mismos
 						System.out.println("4 - "+client.getReplyString());
 						String destino1="fralg100@gmail.com";
 						String asunto="Numero de conexiones correctas";
