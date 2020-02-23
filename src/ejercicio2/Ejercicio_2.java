@@ -20,13 +20,10 @@ public class Ejercicio_2 {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		//Seguramente, no funcione fuera de mi local porque tiene datos muy especificos
-		//pero seguimos hacia adelante
-		trycatch s=new trycatch();//Esta es mi libreria personal de utilidades
-		String usuario; //Usuario del servidor FTP, usuario1, usuario2 o usuario3
-		int usuariosCorrectos=0; //numero de veces que se logean correctamente
+		trycatch s=new trycatch();
+		String usuario;
+		int usuariosCorrectos=0;
 		do {
-			//Se les pide los datos a los usuarios
 			System.out.println("Introduzca usuario");
 			usuario=s.String();
 			
@@ -34,38 +31,29 @@ public class Ejercicio_2 {
 			String clave=s.String();
 			
 			FTPClient cliente=new FTPClient();
-			//nos conectaremos a localhost
 			String servFTP="localhost";
-			//String servFTP="ftp.rediris.es";
 			System.out.println("Nos conectamos a: "+servFTP);
 			
 			
-			//Guardamos esto, nos sera de utilidad
 			String directorio="/LOG/";
 			
 			try {
-				//nos conectamos
+
 				cliente.connect(servFTP);
 				
 				cliente.enterLocalPassiveMode();
-				
-				//Comprobamos si el login es correcto
-				//si no lo es, seguimos, pero no contamos un login exitoso
+
 				boolean login=cliente.login(usuario, clave);
 				
 				if(login) {
 					System.out.println("Login correcto");
-				
-					//imprimimos el directorio actual
+
 					System.out.println("Directorio actual: "+cliente.printWorkingDirectory());
-					//hacemos un array de archivos (los listamos)
 					FTPFile[] files=cliente.listFiles();
 					System.out.println("Ficheros en el directorio actual: "+files.length);
 					
-					//Y de tipos (para imprimir)
 					String tipos[]= {"Fichero","Directorio","Enlace simb."};
 					
-					//imprimimos los nombres de los archivos y sus tipos
 					for (int i = 0; i < files.length; i++) {
 						System.out.println("\t"+files[i].getName()+" => "+tipos[files[i].getType()]);
 					}
